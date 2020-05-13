@@ -1,0 +1,19 @@
+{
+  "name": "lou_remy_p1-api",
+  "version": "1.0.0",
+  "description": "api for p1",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/200406-java-react-usf/lou_remy_p1-api.git"
+  },
+  "author": "Lou remy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/200406-java-react-usf/lou_remy_p1-api/issues"
+  },
+  "homepage": "https://github.com/200406-java-react-usf/lou_remy_p1-api#readme"
+}
