@@ -2,6 +2,7 @@
 import express from 'express';
 import cors from 'cors';
 import { Pool } from 'pg'
+import dotenv from 'dotenv'
 const app = express();
 
 //middleware
@@ -10,12 +11,15 @@ app.use(express.json())
 
 
 //db config
+dotenv.config()
+
 export const connectionPool: Pool = new Pool({
-    user:
-    password:
-    host:
-    port:
-    database:
+    user: process.env['DB_USER'],
+    password: process.env['DB_PASSWORD'],
+    host: process.env['DB_HOST'],
+    port: +process.env['DB_PORT'],
+    database: process.env['DB_NAME'],
+    max: 5
 })
 
 //////routes//////
@@ -33,7 +37,7 @@ export const connectionPool: Pool = new Pool({
 
 //admin
 //create new user
-
+app.post('/',)
 //update a user
 
 //delete a user
