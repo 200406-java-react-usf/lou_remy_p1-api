@@ -4,7 +4,7 @@
   "description": "api for p1",
   "main": "index.js",
   "scripts": {
-    "build":"tsc",
+    "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -16,5 +16,20 @@
   "bugs": {
     "url": "https://github.com/200406-java-react-usf/lou_remy_p1-api/issues"
   },
-  "homepage": "https://github.com/200406-java-react-usf/lou_remy_p1-api#readme"
+  "homepage": "https://github.com/200406-java-react-usf/lou_remy_p1-api#readme",
+  "dependencies": {
+    "@types/cors": "^2.8.6",
+    "@types/pg": "^7.14.3",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-session": "^1.17.1",
+    "pg": "^8.2.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.6",
+    "@types/express-session": "^1.17.0",
+    "nodemon": "^2.0.4",
+    "typescript": "^3.9.2"
+  }
 }
