@@ -4,6 +4,7 @@
   "description": "api for p1",
   "main": "index.js",
   "scripts": {
+    "start": "tsc && node ./build/index.js",
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
