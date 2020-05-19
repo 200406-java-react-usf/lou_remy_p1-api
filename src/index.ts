@@ -62,7 +62,7 @@ app.post('/myreimb',async (req,res)=>{
     }
 })
 //update a pending reimb
-app.put('/myreimb/:id&:reimbid', async (req,res)=>{
+app.put('/myreimb/:id/:reimbid', async (req,res)=>{
     try {
         const  id  = parseInt(req.params.id)
         console.log(req.params.id)
@@ -76,7 +76,7 @@ app.put('/myreimb/:id&:reimbid', async (req,res)=>{
             er.reimb_id = $4 and
             er.reimb_status_id =1)`, [description,amount,id,reimbid]) 
             res.json(updateReimb)
-            console.log(updateReimb)
+           
     } catch (error) {
         console.log(error.message)
         
@@ -84,7 +84,7 @@ app.put('/myreimb/:id&:reimbid', async (req,res)=>{
 })
 //admin
 //create new user
-app.post('/addusers', async (req,res)=>{
+app.post('/admin', async (req,res)=>{
     try {
         const { username } = req.body
         const newUser  =await connectionPool.query(
@@ -96,9 +96,45 @@ app.post('/addusers', async (req,res)=>{
     }
 })
 //update a user
-
+app.put('/admin/:userid', async (req,res)=>{
+    try {
+        const userid = parseInt(req.params.userid)
+        const { 
+            new_username,
+            new_first_name,
+            new_last_name,
+            new_email,
+            new_user_role_id
+            } = req.body
+        const updateUser = await connectionPool.query(
+            `update ers_users eu
+             set username = '${new_username}',
+                 first_name = '${new_first_name}',
+                 last_name = '${new_last_name}',
+                 email = '${new_email}',
+                 user_role_id = ${new_user_role_id}
+                 where ers_user_id = $1`,[userid]); 
+        res.json(updateUser)
+    } catch (error) {
+        console.log(error.message)
+    }
+})
 //delete a user
+app.delete('/admin/:userid', async (req,res)=>{
+    try {
+//update or delete on table "ers_users" violates 
+//foreign key constraint 
+//"ers_reimbursements_author_id_fkey" on table "ers_reimbursements" 
+        const userid = parseInt(req.params.userid)
+        const deleteUser = await connectionPool.query(
+            `delete from ers_users er
+            where er.ers_user_id = ${userid}`)
+            res.json("User deleted")
+    } catch (error) {
+        console.log(error.message)
 
+    }
+})
 //finance manager 
 //get all reimb
 app.get('/reimb', async (req,res)=>{
@@ -113,23 +149,52 @@ app.get('/reimb', async (req,res)=>{
     
 })
 //get all by type or status
-app.get('/reimb/:typeid', async (req,res)=>{
-    //currently returning [] w postman
+app.get('/reimb/t/:typeid', async (req,res)=>{
+//currently returning [] w postman
     try {
-        const { type } = req.params
+        const  typeid  = parseInt(req.params.typeid)
         const reimbsByTypes = await connectionPool.query(
             `select * from ers_reimbursements er
             inner join ers_reimbursement_types ert on er.reimb_type_id = ert.reimb_type_id
-            where er.reimb_type_id = $1`, [type])
+            where er.reimb_type_id = ${typeid}`)
         res.json(reimbsByTypes.rows)
     } catch (error) {
         
     }
 })
+
+app.get('/reimb/s/:statusid', async (req,res)=>{
+    //
+        try {
+            const statusid  = parseInt(req.params.statusid)
+            const reimbsBystatus = await connectionPool.query(
+
+                //mispelled reimbursement in status table in DB -__-
+                `select * from ers_reimbursements er
+                inner join ers_reinbursement_statuses ers on er.reimb_status_id = ers.reimb_status_id
+                where er.reimb_status_id = ${statusid}`)
+            res.json(reimbsBystatus.rows)
+        } catch (error) {
+            console.log(error)
+        }
+    })
+
 //view reimb details 
 
 //update reimb from pending to either approved or denied 
-app.put
+app.put('/reimb/:reimbid', async (req,res)=>{
+    try {
+        const reimbid = parseInt(req.params.reimbid)
+        const {new_status} = req.body
+        const updateStatus = await connectionPool.query(
+            `update ers_reimbursements er
+                set er.reimb_status_id = ${new_status}
+                where er.reimbid=${reimbid}`
+        )
+    } catch (error) {
+        console.log(error)
+    }
+})
 
 
 
