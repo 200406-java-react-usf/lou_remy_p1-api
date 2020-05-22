@@ -7,11 +7,16 @@ import express from 'express';
 import cors from 'cors';
 import { Pool } from 'pg'
 import dotenv from 'dotenv'
+import session from 'express-session';
+import { sessionMiddleware } from './middleware/session-middleware';
+import { AuthRouter } from './routers/auth-router';
 const app = express();
 
 //middleware
+app.use(sessionMiddleware)
+app.use('/auth', AuthRouter)
 app.use(cors())
-app.use(express.json())
+app.use('/',express.json())
 
 
 //db config
@@ -168,8 +173,6 @@ app.get('/reimb/s/:statusid', async (req,res)=>{
         try {
             const statusid  = parseInt(req.params.statusid)
             const reimbsBystatus = await connectionPool.query(
-
-                //mispelled reimbursement in status table in DB -__-
                 `select * from ers_reimbursements er
                 inner join ers_reinbursement_statuses ers on er.reimb_status_id = ers.reimb_status_id
                 where er.reimb_status_id = ${statusid}`)
@@ -201,4 +204,6 @@ app.put('/reimb/:reimbid', async (req,res)=>{
 app.listen(8080, ()=>{
     console.log('server running on port 8080')
 })
+
+//router  auth, other?
 
