@@ -4,19 +4,13 @@
 //respective directories,
 //make authorization,
 import express from 'express';
+import { corsFilter } from './middleware/cors-filter-middleware'
 import cors from 'cors';
 import { Pool } from 'pg'
 import dotenv from 'dotenv'
 import session from 'express-session';
 import { sessionMiddleware } from './middleware/session-middleware';
 import { AuthRouter } from './routers/auth-router';
-const app = express();
-
-//middleware
-app.use(sessionMiddleware)
-app.use('/auth', AuthRouter)
-app.use(cors())
-app.use('/',express.json())
 
 
 //db config
@@ -31,7 +25,12 @@ export const connectionPool: Pool = new Pool({
     max: 5
 })
 
-
+const app = express();
+//middleware
+app.use(corsFilter)
+app.use('/',express.json())
+app.use(sessionMiddleware)
+app.use('/auth', AuthRouter)
 
 
 //////routes//////
